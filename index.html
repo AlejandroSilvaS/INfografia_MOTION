@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motores de videojuegos · Evolución</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* Quita el marco del logo sin cambiar su espacio ni posición. */
+    .logo-slot {
+      border-color: transparent !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip" href="#motores">Ir a los motores</a>
+
+  <!-- Fantasma sin mensajes. Adaptación de BlackisPlay / Uiverse.io. -->
+  <div class="ghost-track" aria-hidden="true">
+    <div class="ghost-position">
+      <div id="ghost">
+        <div id="red">
+          <i class="ghost-body"></i>
+          <i class="eye left"></i>
+          <i class="eye right"></i>
+          <i class="pupil left"></i>
+          <i class="pupil right"></i>
+          <i class="mouth"></i>
+          <i class="feet"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <header class="hero">
+      <div class="topline">
+        <span>ARCHIVO INTERACTIVO / 01</span>
+
+        <button id="motion" type="button" aria-pressed="false">
+        </button>
+      </div>
+
+      <h1>
+        <span>MOTORES</span>
+        <small>DE VIDEOJUEGOS</small>
+      </h1>
+
+      <div class="ribbon">
+        EVOLUCIÓN
+        <span aria-hidden="true">↗</span>
+      </div>
+
+      <p class="intro">
+        De los primeros mundos poligonales a la iluminación en tiempo real.
+        Recorre los hitos y descubre cómo cambiaron las herramientas
+        con las que se crean los videojuegos.
+      </p>
+
+      <nav
+        id="timeline"
+        class="timeline"
+        aria-label="Saltar a un motor"
+      ></nav>
+    </header>
+
+    <div id="motores"></div>
+
+    <footer>
+      <div>
+        <strong>
+     
+        </strong>
+
+        <p>
+        
+        </p>
+      </div>
+
+      <div>
+        <div class="swatches" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </div>
+
+        <span>
+          
+        </span>
+      </div>
+    </footer>
+  </main>
+
+  <div id="ventanas"></div>
+
+  <noscript>
+    <p class="noscript">
+      Activa JavaScript para ver las tarjetas y sus ventanas informativas.
+    </p>
+  </noscript>
+
+  <script>
+    /*
+     * Las rutas usan / y conservan los nombres de tus archivos.
+     * La carpeta imagenes debe estar junto a index.html.
+     * Si dejas una ruta vacía, aparece el espacio reservado.
+     */
+
+    const motores = [
+      {
+        id: "freescape",
+        nombre: "FREESCAPE",
+        fecha: "1987",
+        etapa: "LOS PRIMEROS MUNDOS",
+        tema: 0,
+        subtitulo: "Primero la forma, después el detalle.",
+        resumen:
+          "Con poca memoria y capacidad de cálculo, permitió explorar espacios tridimensionales construidos con polígonos de colores planos.",
+        etiquetas: "Polígonos · renderizado por CPU",
+        detalle:
+          "El procesador calculaba la escena sin la ayuda de las tarjetas gráficas modernas. Los mundos se construían con formas sencillas, como bloques y rampas, que podían observarse desde diferentes posiciones.",
+        clave:
+          "El avance estaba en recorrer un espacio tridimensional, aunque su apariencia todavía fuera muy simple.",
+        logo: "imagenes/logo-freescape.png",
+        imagen: "imagenes/captura-freescape.jpg"
+      },
+      {
+        id: "wolfenstein",
+        nombre: "WOLFENSTEIN 3D",
+        fecha: "1992",
+        etapa: "LA ILUSIÓN DE PROFUNDIDAD",
+        tema: 1,
+        subtitulo: "Rayos que construyen pasillos.",
+        resumen:
+          "El ray casting calculaba la distancia hasta las paredes para dibujar su tamaño en pantalla y producir una sensación de profundidad.",
+        etiquetas: "Ray casting · texturas · sprites",
+        detalle:
+          "Las paredes se proyectaban desde un mapa organizado en cuadrícula. Los personajes y muchos objetos eran imágenes planas o sprites. Esta combinación permitía mostrar escenarios con perspectiva a gran velocidad.",
+        clave:
+          "La representación tenía límites: las paredes compartían altura y no existían pisos superpuestos.",
+        logo: "imagenes/Wolfestein-logo.png",
+        imagen: "imagenes/Wolfestein-juego.jpg"
+      },
+      {
+        id: "doom",
+        nombre: "DOOM ENGINE",
+        fecha: "1993",
+        etapa: "TEXTURAS Y SECTORES",
+        tema: 2,
+        subtitulo: "Escaleras, alturas y sombras.",
+        resumen:
+          "Los sectores permitieron variar las alturas del suelo y del techo, además de la iluminación, para crear espacios más complejos.",
+        etiquetas: "2.5D · sectores · recursos WAD",
+        detalle:
+          "Cada sector podía tener propiedades distintas. Eso permitió construir escaleras, ascensores y zonas oscuras. La separación de recursos en archivos WAD facilitó que la comunidad creara mapas y modificaciones.",
+        clave:
+          "Su arquitectura original no permitía superponer habitaciones como en un motor 3D completo.",
+        logo: "imagenes/Doom-Logo-1993.png",
+        imagen: "imagenes/Doom-juego.jpg"
+      },
+      {
+        id: "quake",
+        nombre: "QUAKE ENGINE",
+        fecha: "1996",
+        etapa: "EL SALTO POLIGONAL",
+        tema: 3,
+        subtitulo: "Personajes y escenarios en 3D.",
+        resumen:
+          "Los modelos poligonales ampliaron la libertad de movimiento y permitieron observar los entornos desde diferentes ángulos.",
+        etiquetas: "Modelos 3D · perspectiva · OpenGL",
+        detalle:
+          "El motor apareció inicialmente con renderizado por software. Posteriormente, GLQuake aprovechó OpenGL y las tarjetas aceleradoras para trasladar parte del trabajo gráfico al hardware especializado.",
+        clave:
+          "Durante esta transición convivieron el renderizado por software y la aceleración gráfica.",
+        logo: "imagenes/Quake-Logo.png",
+        imagen: "imagenes/Quake-juego.jpg"
+      },
+      {
+        id: "unreal",
+        nombre: "UNREAL ENGINE",
+        fecha: "1998",
+        etapa: "EL MOTOR COMO HERRAMIENTA",
+        tema: 4,
+        subtitulo: "Construir mundos desde un editor.",
+        resumen:
+          "Las herramientas de edición permitieron organizar escenarios, luces y efectos dentro de un entorno de creación reutilizable.",
+        etiquetas: "Unreal Engine 1 · editor · iluminación",
+        detalle:
+          "El editor UnrealEd acercó la construcción de niveles a diseñadores y creadores de contenido. La licencia del motor permitió que otros estudios utilizaran esa tecnología como base para sus proyectos.",
+        clave:
+          "Esta etapa corresponde a Unreal Engine 1. Las herramientas actuales pertenecen a generaciones posteriores.",
+        logo: "imagenes/Unreal_Engine_2004.webp",
+        imagen: "imagenes/UE1_juego.jpg"
+      },
+      {
+        id: "source",
+        nombre: "SOURCE",
+        fecha: "2004",
+        etapa: "FÍSICAS Y EXPRESIÓN",
+        tema: 0,
+        subtitulo: "El entorno responde a tus acciones.",
+        resumen:
+          "La combinación de físicas, animación facial y materiales permitió integrar los objetos y personajes de forma más convincente en la experiencia.",
+        etiquetas: "Físicas · shaders · animación",
+        detalle:
+          "Los objetos podían interactuar mediante peso, fuerzas y colisiones. Los shaders definían cómo se mostraban las superficies bajo la luz, mientras que la animación facial reforzaba la expresión de los personajes.",
+        clave:
+          "Un motor de juego reúne gráficos, física, sonido, animación, lógica y herramientas de desarrollo.",
+        logo: "imagenes/Sorcelogo.png",
+        imagen: "imagenes/source-juego.jpg"
+      },
+      {
+        id: "unity",
+        nombre: "UNITY",
+        fecha: "2005",
+        etapa: "CREACIÓN MULTIPLATAFORMA",
+        tema: 2,
+        subtitulo: "Más creadores, más estilos.",
+        resumen:
+          "Un entorno de desarrollo para proyectos 2D y 3D que combina edición visual, componentes y programación en C#.",
+        etiquetas: "2D / 3D · C# · componentes",
+        detalle:
+          "Su organización mediante objetos y componentes permite combinar comportamientos, gráficos, audio y física. Las herramientas de exportación facilitan adaptar los proyectos a distintas plataformas.",
+        clave:
+          "La evolución de los motores también consiste en ampliar el acceso a la creación y permitir estilos visuales diferentes.",
+        logo: "imagenes/Unity-Logo-2004.png",
+        imagen: "imagenes/unity-jueg.jpg"
+      },
+      {
+        id: "cryengine",
+        nombre: "CRYENGINE 2",
+        fecha: "2007",
+        etapa: "LA GENERACIÓN HD",
+        tema: 1,
+        subtitulo: "Naturaleza, luz y escala.",
+        resumen:
+          "La vegetación, las sombras y los materiales detallados impulsaron la creación de entornos naturales de gran riqueza visual.",
+        etiquetas: "HDR · sombras · entornos naturales",
+        detalle:
+          "La búsqueda de escenas más realistas combinó iluminación, efectos atmosféricos y mayor complejidad visual. Estos avances también elevaron las exigencias de procesamiento y memoria.",
+        clave:
+          "El año corresponde a CRYENGINE 2, no al inicio de toda la familia CRYENGINE.",
+        logo: "imagenes/CryEngine_Logo.svg",
+        imagen: "imagenes/CryEngine_juego.jpg"
+      },
+      {
+        id: "godot",
+        nombre: "GODOT",
+        fecha: "2014",
+        etapa: "DESARROLLO ABIERTO",
+        tema: 3,
+        subtitulo: "Construir desde escenas y nodos.",
+        resumen:
+          "Su apertura pública impulsó un motor de código abierto para proyectos 2D y 3D, organizado mediante escenas reutilizables.",
+        etiquetas: "Escenas · nodos · licencia MIT",
+        detalle:
+          "Los nodos aportan funciones concretas, como gráficos, sonido o física. Al combinarlos en escenas, se pueden construir elementos reutilizables y organizar proyectos de distintas escalas.",
+        clave:
+          "El acceso al código permite estudiar, modificar y adaptar el motor.",
+        logo: "imagenes/Godot_icon.svg.webp",
+        imagen: "imagenes/GOdot game.jpg"
+      },
+      {
+        id: "unreal5",
+        nombre: "UNREAL ENGINE 5",
+        fecha: "2020s",
+        etapa: "EL RENDERIZADO CONTEMPORÁNEO",
+        tema: 4,
+        subtitulo: "Más detalle, luz más creíble.",
+        resumen:
+          "La geometría detallada, la iluminación global y los materiales físicamente basados amplían las posibilidades de creación en tiempo real.",
+        etiquetas: "Nanite · Lumen · materiales PBR",
+        detalle:
+          "Nanite permite trabajar con geometría muy detallada y Lumen ofrece iluminación global y reflejos dinámicos. La configuración del proyecto debe equilibrar calidad visual y rendimiento según el hardware.",
+        clave:
+          "La tecnología amplía las opciones; la dirección artística sigue definiendo cómo se ve cada experiencia.",
+        logo: "imagenes/Unreal_Engine-Logo.wine.png",
+        imagen: "imagenes/unreal_juego.png"
+      }
+    ];
+
+    const timeline = document.getElementById("timeline");
+    const contenedor = document.getElementById("motores");
+    const ventanas = document.getElementById("ventanas");
+
+    const escapeHTML = value => String(value).replace(
+      /[&<>"']/g,
+      character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]
+    );
+
+    motores.forEach((motor, index) => {
+      const numero = String(index + 1).padStart(2, "0");
+
+      timeline.insertAdjacentHTML("beforeend", `
+        <a href="#${motor.id}">
+          <b>${motor.fecha}</b>
+          <span>${motor.nombre}</span>
+        </a>
+      `);
+
+      const logo = motor.logo
+        ? `<img
+             src="${escapeHTML(motor.logo)}"
+             alt="Logo de ${motor.nombre}"
+             loading="lazy"
+           >`
+        : "LOGO<br>AQUÍ";
+
+      const imagen = motor.imagen
+        ? `<img
+             src="${escapeHTML(motor.imagen)}"
+             alt="Ejemplo visual de ${motor.nombre}"
+             loading="lazy"
+           >`
+        : `
+            <span class="media-icon" aria-hidden="true">+</span>
+            <span>ESPACIO PARA TU IMAGEN</span>
+            <small>Añade una captura o ilustración</small>
+          `;
+
+      contenedor.insertAdjacentHTML("beforeend", `
+        <section
+          class="engine theme-${motor.tema}"
+          id="${motor.id}"
+          aria-labelledby="titulo-${motor.id}"
+        >
+          <div class="section-meta">
+            <span>${numero} / ${motor.etapa}</span>
+            <span class="year">${motor.fecha}</span>
+          </div>
+
+          <div class="engine-grid">
+            <div class="copy">
+              <div class="identity">
+                <div class="logo-slot">${logo}</div>
+                <span class="pixel-mark" aria-hidden="true">↗</span>
+              </div>
+
+              <h2 id="titulo-${motor.id}">${motor.nombre}</h2>
+              <h3>${motor.subtitulo}</h3>
+              <p>${motor.resumen}</p>
+              <div class="tags">${motor.etiquetas}</div>
+
+              <button
+                class="more"
+                type="button"
+                data-dialog="info-${motor.id}"
+              >
+                Saber más
+                <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+
+            <figure>
+              <div class="media-slot">
+                ${imagen}
+                <span class="corner tl"></span>
+                <span class="corner tr"></span>
+                <span class="corner bl"></span>
+                <span class="corner br"></span>
+              </div>
+
+              <figcaption>
+                EJEMPLO VISUAL / ${motor.nombre}
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+      `);
+
+      ventanas.insertAdjacentHTML("beforeend", `
+        <dialog
+          id="info-${motor.id}"
+          aria-labelledby="modal-titulo-${motor.id}"
+        >
+          <div class="modal-top">
+            <span>ENGINE FILE / ${numero}</span>
+
+            <button
+              class="close-x"
+              type="button"
+              aria-label="Cerrar información"
+            >×</button>
+          </div>
+
+          <div class="modal-inner">
+            <span class="modal-year">
+              ${motor.fecha} / ${motor.etapa}
+            </span>
+
+            <h2 id="modal-titulo-${motor.id}">
+              ${motor.nombre}
+            </h2>
+
+            <p>${motor.detalle}</p>
+            <aside>${motor.clave}</aside>
+
+            <button class="close-modal" type="button">
+              Seguir el recorrido
+            </button>
+          </div>
+        </dialog>
+      `);
+    });
+
+    /* Ventanas emergentes */
+
+    let ultimoBoton = null;
+
+    document.querySelectorAll("[data-dialog]").forEach(button => {
+      button.addEventListener("click", () => {
+        ultimoBoton = button;
+        document.getElementById(button.dataset.dialog).showModal();
+        document.body.classList.add("modal-open");
+      });
+    });
+
+    document.querySelectorAll("dialog").forEach(dialog => {
+      dialog.querySelectorAll(".close-x, .close-modal").forEach(button => {
+        button.addEventListener("click", () => dialog.close());
+      });
+
+      dialog.addEventListener("click", event => {
+        if (event.target !== dialog) return;
+
+        const rect = dialog.getBoundingClientRect();
+        const fuera =
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom;
+
+        if (fuera) dialog.close();
+      });
+
+      dialog.addEventListener("close", () => {
+        document.body.classList.remove("modal-open");
+        ultimoBoton?.focus();
+      });
+    });
+
+    /* Control de movimiento */
+
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
+    const motionButton = document.getElementById("motion");
+    const activeAnimations = new Set();
+
+    const isPaused = () => document.body.classList.contains("paused");
+    const modalOpen = () => document.body.classList.contains("modal-open");
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+    function finishAnimations() {
+      activeAnimations.forEach(animation => animation.finish());
+
+      document.querySelectorAll(".media-slot").forEach(slot => {
+        slot.style.transform = "";
+      });
+    }
+
+    motionButton.addEventListener("click", () => {
+      const paused = document.body.classList.toggle("paused");
+
+      motionButton.setAttribute("aria-pressed", String(paused));
+      motionButton.textContent = paused
+        ? "Activar animaciones"
+        : "Pausar animaciones";
+
+      if (paused) finishAnimations();
+    });
+
+    reduced.addEventListener("change", () => {
+      if (reduced.matches) finishAnimations();
+    });
+
+    /* Entrada de las tarjetas, sin cambiar sus dimensiones */
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+
+          observer.unobserve(entry.target);
+
+          if (reduced.matches || isPaused()) return;
+
+          entry.target.querySelectorAll(
+            ".section-meta, .identity, h2, h3, .copy > p, .tags, .more, figure"
+          ).forEach((element, index) => {
+            const animation = element.animate(
+              [
+                { opacity: 0.25, transform: "translateY(12px)" },
+                { opacity: 1, transform: "translateY(0)" }
+              ],
+              {
+                duration: 550,
+                delay: Math.min(index * 45, 250),
+                easing: "cubic-bezier(.2,.8,.3,1)",
+                fill: "backwards"
+              }
+            );
+
+            activeAnimations.add(animation);
+
+            animation.finished
+              .then(() => activeAnimations.delete(animation))
+              .catch(() => activeAnimations.delete(animation));
+          });
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll(".engine").forEach(section => {
+        observer.observe(section);
+      });
+    }
+
+    /* Respuesta sutil de las imágenes al cursor */
+
+    document.querySelectorAll(".media-slot").forEach(slot => {
+      slot.addEventListener("pointermove", event => {
+        if (!finePointer.matches || reduced.matches || isPaused()) return;
+
+        const rect = slot.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+
+        slot.style.transform = `
+          perspective(900px)
+          rotateX(${(0.5 - y) * 5}deg)
+          rotateY(${(x - 0.5) * 6}deg)
+        `;
+      });
+
+      slot.addEventListener("pointerleave", () => {
+        slot.style.transform = "";
+      });
+    });
+
+    /* Fantasma: sigue al cursor, mira y reacciona. Sin mensajes. */
+
+    const ghostPosition = document.querySelector(".ghost-position");
+    const ghost = document.getElementById("ghost");
+    const pupils = [...document.querySelectorAll(".pupil")];
+
+    let gx = innerWidth - 85;
+    let gy = innerHeight * 0.3;
+    let vx = 0;
+    let vy = 0;
+    let lastTime;
+    let scaredUntil = 0;
+    let lastScroll = scrollY;
+
+    const mouse = {
+      x: null,
+      y: null,
+      time: 0,
+      vx: 0,
+      vy: 0
+    };
+
+    addEventListener("pointermove", event => {
+      if (event.pointerType !== "mouse") return;
+
+      const now = performance.now();
+      const dt = Math.max(now - mouse.time, 8) / 1000;
+
+      if (mouse.x !== null) {
+        mouse.vx = (event.clientX - mouse.x) / dt;
+        mouse.vy = (event.clientY - mouse.y) / dt;
+      }
+
+      mouse.x = event.clientX;
+      mouse.y = event.clientY;
+      mouse.time = now;
+    }, { passive: true });
+
+    document.documentElement.addEventListener("mouseleave", () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    addEventListener("scroll", () => {
+      const change = scrollY - lastScroll;
+      lastScroll = scrollY;
+
+      if (!reduced.matches && !isPaused() && !modalOpen()) {
+        gy -= clamp(change * 0.25, -45, 45);
+      }
+    }, { passive: true });
+
+    function animateGhost(time) {
+      const dt = lastTime === undefined
+        ? 0
+        : Math.min((time - lastTime) / 1000, 0.05);
+
+      lastTime = time;
+
+      const size = ghostPosition.offsetWidth;
+      const width = innerWidth;
+      const height = innerHeight;
+      const hasMouse = mouse.x !== null && finePointer.matches;
+
+      const still =
+        reduced.matches ||
+        isPaused() ||
+        modalOpen() ||
+        document.hidden;
+
+      if (reduced.matches) {
+        gx = width - size - 18;
+        gy = height - size - 18;
+        vx = vy = 0;
+      } else if (!still) {
+        const scared = time < scaredUntil;
+        let targetX;
+        let targetY;
+
+        if (scared && hasMouse) {
+          const dx = gx + size / 2 - mouse.x;
+          const dy = gy + size / 2 - mouse.y;
+          const length = Math.hypot(dx, dy) || 1;
+
+          targetX = gx + dx / length * 130;
+          targetY = gy + dy / length * 130;
+        } else if (hasMouse) {
+          targetX = mouse.x > width - 120
+            ? mouse.x - size - 26
+            : mouse.x + 26;
+
+          targetY = mouse.y + 24;
+
+          if (time - mouse.time > 2500) {
+            targetX += Math.sin(time / 1100) * 14;
+            targetY += Math.cos(time / 1000) * 10;
+          }
+        } else {
+          targetX = width - size - 18;
+          targetY = height * 0.34 + Math.sin(time / 1200) * 18;
+        }
+
+        const easing = 1 - Math.exp(-dt * (scared ? 5 : 3.2));
+
+        const nextX = clamp(
+          gx + (targetX - gx) * easing,
+          6,
+          width - size - 6
+        );
+
+        const nextY = clamp(
+          gy + (targetY - gy) * easing,
+          6,
+          height - size - 6
+        );
+
+        vx = dt ? (nextX - gx) / dt : 0;
+        vy = dt ? (nextY - gy) / dt : 0;
+
+        gx = nextX;
+        gy = nextY;
+
+        if (hasMouse && !scared) {
+          const dx = gx + size / 2 - mouse.x;
+          const dy = gy + size / 2 - mouse.y;
+
+          const approaching =
+            time - mouse.time < 150 &&
+            Math.hypot(mouse.vx, mouse.vy) > 250 &&
+            mouse.vx * dx + mouse.vy * dy > 0;
+
+          if (approaching && Math.hypot(dx, dy) < size * 0.85) {
+            scaredUntil = time + 1400;
+          }
+        }
+      } else {
+        vx = vy = 0;
+      }
+
+      ghost.classList.toggle("scared", time < scaredUntil);
+      ghost.classList.toggle("moving", !still && Math.hypot(vx, vy) > 20);
+
+      const tilt = clamp(vx * 0.025, -9, 9);
+
+      ghostPosition.style.transform =
+        `translate3d(${gx}px, ${gy}px, 0) rotate(${tilt}deg)`;
+
+      if (!still) {
+        const lookX = hasMouse ? mouse.x - gx - size / 2 : vx;
+        const lookY = hasMouse ? mouse.y - gy - size / 2 : vy;
+        const length = Math.hypot(lookX, lookY) || 1;
+
+        pupils.forEach(pupil => {
+          pupil.style.transform = `
+            translate(
+              ${5 + lookX / length * 8}px,
+              ${lookY / length * 8}px
+            )
+          `;
+        });
+      }
+
+      requestAnimationFrame(animateGhost);
+    }
+
+    requestAnimationFrame(animateGhost);
+  </script>
+</body>
+</html>
